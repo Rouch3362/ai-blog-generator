@@ -9,21 +9,32 @@ import environ
 env = environ.Env()
 env.read_env()
 
+
+import requests
+
+
+
 @api_view(["POST"])
-def generate_blog(request):
+def blog_generator(request):
 
     url = request.data["link"]
     # get video object by pytube
     video_obj = YouTube(url)
 
     # get transcribed text
-    transcirbed_text = transcribe(video_obj)
+    transcribed_text = transcribe(video_obj)
     
-    res = {
+    prompt = f"Based on the following transcript from a YouTube video, write a comprehensive blog article, write it based on the transcript, but dont make it look like a youtube video, make it look like a proper blog article:\n\n{transcribed_text}\n\n"
+
+
+    blog = generate_blog(prompt)
+
+    data = {
         "title": video_obj.title,
-        "body": transcirbed_text
+        "body": blog
     }
-    return Response(res , status=status.HTTP_200_OK)
+    
+    return Response(data , status=status.HTTP_200_OK)
 
 def download_audio(video):
     audio = video.streams.filter(only_audio=True).first()
@@ -35,5 +46,26 @@ def transcribe(video):
     audio_path = download_audio(video)
     transcriber = aai.Transcriber()
     transcript = transcriber.transcribe(audio_path)
-    print(transcript.text)
     return transcript.text
+
+def generate_blog(prompt):
+    url = "https://api.edenai.run/v2/text/generation"
+
+    payload = {
+        "response_as_dict": True,
+        "attributes_as_list": False,
+        "show_original_response": False,
+        "temperature": 0,
+        "max_tokens": 1000,
+        "text": prompt,
+        "providers": "google"
+    }
+    headers = {
+        "Authorization": f'Bearer {env("EDEN_APIKEY")}',
+        "accept": "application/json",
+        "content-type": "application/json"
+    }
+
+    response = requests.post(url, json=payload, headers=headers)
+
+    return response.json()["google"]["generated_text"]
