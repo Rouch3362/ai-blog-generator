@@ -5,6 +5,8 @@ from rest_framework import status
 import assemblyai as aai
 from django.conf import settings
 import environ
+from ..models import Blog
+from rest_framework.exceptions import NotAuthenticated
 
 env = environ.Env()
 env.read_env()
@@ -16,6 +18,10 @@ import requests
 
 @api_view(["POST"])
 def blog_generator(request):
+
+
+    if not request.user.is_authenticated:
+        raise NotAuthenticated
 
     url = request.data["link"]
     # get video object by pytube
@@ -33,6 +39,10 @@ def blog_generator(request):
         "title": video_obj.title,
         "body": blog
     }
+
+    blogInstance = Blog(owner=request.user , title=video_obj.title , body=blog)
+    blogInstance.save()
+
     
     return Response(data , status=status.HTTP_200_OK)
 
