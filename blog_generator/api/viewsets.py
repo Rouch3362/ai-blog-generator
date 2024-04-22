@@ -5,16 +5,17 @@ from rest_framework import status
 import assemblyai as aai
 from django.conf import settings
 import environ
+from rest_framework.generics import ListAPIView
 from ..models import Blog
 from rest_framework.exceptions import NotAuthenticated
+from rest_framework.permissions import IsAuthenticated
 import os
-
+import requests
+from .serializers import BlogSerializer
 
 env = environ.Env()
 env.read_env()
 
-
-import requests
 
 
 
@@ -57,8 +58,11 @@ def download_audio(video):
 
 def transcribe(video):
     aai.settings.api_key = env("AAI_APIKEY")
+    # get audio path
     audio_path = download_audio(video)
+    # creating instance of transcriber class
     transcriber = aai.Transcriber()
+    # convert audio to text
     transcript = transcriber.transcribe(audio_path)
     transcribed_text = transcript.text
     return (transcribed_text , audio_path)
@@ -84,3 +88,11 @@ def generate_blog(prompt):
     response = requests.post(url, json=payload, headers=headers)
 
     return response.json()["google"]["generated_text"]
+
+
+
+class UserBlog(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = BlogSerializer
+    def get_queryset(self):
+        return Blog.objects.filter(owner=self.request.user)
