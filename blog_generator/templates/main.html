@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI BLOG GENERATOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+    <header class="flex justify-center items-center m-auto mt-10 gap-14">
+        <a href="{% url 'home' %}" class="text-2xl">Home</a>
+        <a href="" class="text-2xl">Blogs</a>
+        <a href="" class="text-2xl">Logout</a>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>
