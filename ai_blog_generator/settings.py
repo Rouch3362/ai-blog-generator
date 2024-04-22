@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     'users.apps.UsersConfig',
-    'blog_generator.apps.BlogGeneratorConfig'
+    'blog_generator.apps.BlogGeneratorConfig',
+    'crispy_forms',
+    'crispy_tailwind',
 ]
 
 MIDDLEWARE = [
@@ -186,3 +188,12 @@ MEDIA_URL = "/uploads/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "home"
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
