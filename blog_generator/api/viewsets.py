@@ -25,8 +25,12 @@ def blog_generator(request):
 
     if not request.user.is_authenticated:
         raise NotAuthenticated
+    
+    if request.POST.get("link") is None:
+        return Response({"message": "link field Is required"} , status=status.HTTP_400_BAD_REQUEST)
 
-    url = request.data["link"]
+    url = request.POST.get("link")    
+
     # get video object by pytube
     video_obj = YouTube(url)
 
@@ -94,5 +98,6 @@ def generate_blog(prompt):
 class UserBlog(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BlogSerializer
+
     def get_queryset(self):
-        return Blog.objects.filter(owner=self.request.user)
+        return Blog.objects.filter(owner=self.request.user).order_by("-createdAt")
