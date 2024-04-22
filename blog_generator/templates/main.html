@@ -76,7 +76,7 @@
     <header class="flex justify-center items-center m-auto mt-10 gap-14">
         <a href="{% url 'home' %}" class="text-2xl">Home</a>
         {% if user.is_authenticated %}
-            <a href="" class="text-2xl">Blogs</a>
+            <a href="{% url 'blogs' %}" class="text-2xl">Blogs</a>
             <form action="{% url 'logout' %}" method="post" class="text-2xl">
                 {% csrf_token %}
                 <button type="submit">Logout</button>
