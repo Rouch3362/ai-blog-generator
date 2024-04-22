@@ -11,6 +11,7 @@
             {{ form|crispy }}
         </div>
         <button type="submit" class="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold">Login</button>
+        <a href="{% url 'register' %}" class="text-blue-400 underline">Don't Have An Account? Register</a>
     </form>
 </main>
 {% endblock content %}
