@@ -1,1 +1,27 @@
 {% include 'main.html' %}
+
+{% block content %}
+<main class="px-12 w-[700px] py-10 flex flex-col bg-gray-200  rounded-2xl justify-center items-center m-auto mt-20">
+    <h1 class="capitalize text-3xl">AI blog generator</h1>
+    <p class="w-96 text-center mt-5">
+        This is an blog generator app which extracts video's transcript and generate a blog based on that transcript using <a class="underline text-blue-500" target="_blank" href="https://www.edenai.co/">Eden AI</a>. 
+        <br>
+        <span class="text-xs font-bold">
+            Be Aware That, Generation May Take Seconds Or Minutes Based On Your Video's Length. 
+        </span>
+    </p>
+    <form method="post" action="" class="mt-10 flex justify-center items-center gap-8">
+        {% csrf_token %}
+        <input name="link" class="px-6 w-80 py-2 rounded-lg" type="text" placeholder="Enter Youtube Video Link Here..." />
+        <button type="submit" class="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold">Generate</button>
+    </form>
+    {% if data %}
+        
+        <section class="bg-white w-[600px] text-center px-10 py-8 flex flex-col justify-center items-center gap-5 rounded-xl mt-5">
+            <div class="text-2xl font-semibold">Here Is Your Blog:</div>
+            <h1 class="text-center text-xl font-semibold">{{data.title}}</h1>
+            <p>{{data.body}}</p>
+        </section>
+    {% endif %}
+</main>
+{% endblock content %}

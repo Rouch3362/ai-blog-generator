@@ -32,28 +32,11 @@ def blog_generator(request):
     url = request.POST.get("link")    
 
     # get video object by pytube
-    video_obj = YouTube(url)
-
-    # get transcribed text
-    (transcribed_text , audio_path) = transcribe(video_obj)
     
-    prompt = f"Based on the following transcript from a YouTube video, write a comprehensive blog article, write it based on the transcript, but dont make it look like a youtube video, make it look like a proper blog article:\n\n{transcribed_text}\n\n"
-
-
-    blog = generate_blog(prompt)
-
-    data = {
-        "title": video_obj.title,
-        "body": blog
-    }
-
-    blogInstance = Blog(owner=request.user , title=video_obj.title , body=blog)
-    blogInstance.save()
-
-    os.remove(audio_path)
-
+    data = main_func(url , request.user)
     
     return Response(data , status=status.HTTP_200_OK)
+
 
 def download_audio(video):
     audio = video.streams.filter(only_audio=True).first()
@@ -93,6 +76,28 @@ def generate_blog(prompt):
 
     return response.json()["google"]["generated_text"]
 
+
+def main_func(url , user):
+    video_obj = YouTube(url)
+
+    # get transcribed text
+    (transcribed_text , audio_path) = transcribe(video_obj)
+    
+    prompt = f"Based on the following transcript from a YouTube video, write a comprehensive blog article, write it based on the transcript, but dont make it look like a youtube video, make it look like a proper blog article:\n\n{transcribed_text}\n\n"
+
+
+    blog = generate_blog(prompt)
+
+    data = {
+        "title": video_obj.title,
+        "body": blog
+    }
+
+    blogInstance = Blog(owner=user , title=video_obj.title , body=blog)
+    blogInstance.save()
+
+    os.remove(audio_path)
+    return data
 
 
 class UserBlog(ListAPIView):
