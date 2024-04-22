@@ -1,0 +1,16 @@
+{% include 'main.html' %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+
+{% block content %}
+<main class="px-12 w-[700px] py-10 flex flex-col bg-gray-200  rounded-2xl justify-center items-center m-auto mt-20">
+    <h1 class="capitalize text-3xl">Login To Your Account</h1>
+    <form method="post" action="" class="mt-10 flex flex-col justify-center items-center gap-8">
+        {% csrf_token %}
+        <div class="flex justify-center items-center gap-5">
+            {{ form|crispy }}
+        </div>
+        <button type="submit" class="px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold">Login</button>
+    </form>
+</main>
+{% endblock content %}
