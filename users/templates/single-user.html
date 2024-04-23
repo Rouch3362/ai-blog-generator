@@ -1,0 +1,17 @@
+{% include 'main.html' %}
+
+{% block content %}
+<section class="w-[800px] m-auto mt-10 flex flex-col justify-center items-center my-10">
+    <h1 class="text-2xl font-semibold">{{user.username}}'s Blogs</h1>
+    <section class="border-b-2 w-[800px] m-auto mt-10 flex flex-col justify-center items-center my-10">
+        {% for blog in blogs %}
+        
+        <a href="{% url 'single-blog' blog.id %}" class="border-b-2 px-10 py-5">
+            <h1 class="text-xl font-semibold">{{ blog.title|truncatechars:50 }} <span class="text-sm font-medium">Created At: {{ blog.createdAt|date:"d M y" }}</span></h1>
+            <p class="mt-4">{{ blog.body|truncatechars:255 }}</p>
+        </a>
+        
+        {% endfor %}
+    </section>
+</section>
+{% endblock content %}

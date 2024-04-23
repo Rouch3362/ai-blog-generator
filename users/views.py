@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.models import User
-from django.views.generic import DetailView
+from blog_generator.models import Blog
 
 # Create your views here.
 def RegisterUser(request):
@@ -25,7 +25,8 @@ def RegisterUser(request):
 def single_user(request , username):    
     try:
         user = User.objects.get(username=username)
+        blogs = Blog.objects.filter(owner=user)
     except User.DoesNotExist:
         raise Http404("User Not Found")
         
-    return render(request , "single-user.html" , {"user": user})
+    return render(request , "single-user.html" , {"user": user, "blogs": blogs})
