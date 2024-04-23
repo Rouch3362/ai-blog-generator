@@ -1,8 +1,6 @@
-from typing import Any
 from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
 from django.shortcuts import render , redirect
-from .api.viewsets import main_func
+from .api.viewsets import main_func , is_link_valid
 from django.contrib import messages
 from django.views.generic import ListView , DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,6 +19,11 @@ def home(request):
         if not request.user.is_authenticated:
             messages.error(request , "Login To Your Account To Use Blog Generator")
             return
+        
+        # checks if the link is youtube link
+        if not is_link_valid(url):
+            messages.error(request , "Please Enter A Valid Youtube Link")
+            return redirect("home")
         
         data = main_func(url , request.user)
 

@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 import os
 import requests
 from .serializers import BlogSerializer
+import re
 
 env = environ.Env()
 env.read_env()
@@ -31,12 +32,21 @@ def blog_generator(request):
 
     url = request.POST.get("link")    
 
+    if not is_link_valid(url):
+        return Response({"message": "please submit a valid youtube link"} , status=status.HTTP_400_BAD_REQUEST) 
+
     # get video object by pytube
     
     data = main_func(url , request.user)
     
     return Response(data , status=status.HTTP_200_OK)
 
+
+def is_link_valid(link):
+    regex = "^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*"
+    if not re.match(regex , link):
+        return False
+    return True
 
 def download_audio(video):
     audio = video.streams.filter(only_audio=True).first()

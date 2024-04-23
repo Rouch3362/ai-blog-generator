@@ -1,7 +1,7 @@
 {% include 'main.html' %}
 
 {% block content %}
-<section class="border-b-2 w-[800px] m-auto mt-20 flex flex-col justify-center items-center my-10">
+<section class="border-b-2 w-[800px] m-auto mt-10 flex flex-col justify-center items-center my-10">
 {% for blog in blogs %}
 
 <a href="{% url 'single-blog' blog.id %}" class="border-b-2 px-10 py-5">
