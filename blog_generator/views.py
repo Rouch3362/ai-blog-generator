@@ -1,10 +1,13 @@
+from typing import Any
 from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.shortcuts import render , redirect
 from .api.viewsets import main_func , is_link_valid
 from django.contrib import messages
 from django.views.generic import ListView , DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog
+from django.http import Http404
 # Create your views here.
 
 def home(request):
@@ -41,7 +44,11 @@ class Blogs(ListView , LoginRequiredMixin):
     def get_queryset(self):
         return Blog.objects.filter(owner=self.request.user).order_by("-createdAt")
     
-class SingleBlog(DetailView):
-    model = Blog
-    context_object_name = "blog"
-    template_name = "single-blog.html"
+def single_blog(request , pk):
+    try:
+        blog = Blog.objects.get(id=pk)
+    except Blog.DoesNotExist:
+        raise Http404("Blog Not Found")
+    
+    return render(request , "single-blog.html" , {"blog": blog})
+    
