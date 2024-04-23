@@ -5,10 +5,11 @@ from rest_framework import status
 import assemblyai as aai
 from django.conf import settings
 import environ
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView , RetrieveAPIView
 from ..models import Blog
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import CursorPagination
 import os
 import requests
 from .serializers import BlogSerializer
@@ -17,7 +18,9 @@ import re
 env = environ.Env()
 env.read_env()
 
-
+class BlogPaginator(CursorPagination):
+    page_size = 5
+    ordering = "-createdAt"
 
 
 @api_view(["POST"])
@@ -109,10 +112,20 @@ def main_func(url , user):
     os.remove(audio_path)
     return data
 
+@api_view(["GET"])
+def blogs(request):
+    latestBlogs = Blog.objects.filter().order_by("-createdAt")[:5]
+    serializer = BlogSerializer(latestBlogs , many=True)
+    return Response(serializer.data , status=status.HTTP_200_OK)
 
 class UserBlog(ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BlogSerializer
+    pagination_class = BlogPaginator
 
     def get_queryset(self):
         return Blog.objects.filter(owner=self.request.user).order_by("-createdAt")
+    
+class SingleBlog(RetrieveAPIView):
+    serializer_class = BlogSerializer
+    
