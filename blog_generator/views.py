@@ -34,7 +34,8 @@ def home(request):
         
         
     else:
-        return render(request , "home.html")
+        latestBlogs = Blog.objects.filter().order_by("-createdAt")[:5]
+        return render(request , "home.html" , {"blogs": latestBlogs})
     
 class Blogs(ListView , LoginRequiredMixin):
     model = Blog

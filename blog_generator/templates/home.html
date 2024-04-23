@@ -21,7 +21,19 @@
             <div class="text-2xl font-semibold">Here Is Your Blog:</div>
             <h1 class="text-center text-xl font-semibold">{{data.title}}</h1>
             <p>{{data.body}}</p>
-        </section>
+        </section>    
     {% endif %}
 </main>
+{% if not data %}
+<h2 class="text-2xl font-semibold text-center mt-6">5 Latest Generated Blogs</h2>
+<div class="w-[700px] m-auto">
+    {% for blog in blogs %}
+    <a href="{% url 'single-blog' blog.id %}" class="px-10 py-5">
+        <h1 class="text-xl font-semibold">{{ blog.title|truncatechars:50 }} <span class="text-sm font-medium">Created At: {{ blog.createdAt|date:"d M y" }}</span></h1>
+        <p class="mt-4">{{ blog.body|truncatechars:255 }}</p>
+    </a>
+    <hr class="mt-5">
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock content %}
