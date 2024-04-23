@@ -1,7 +1,10 @@
+from typing import Any
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.shortcuts import render , redirect
 from .api.viewsets import main_func
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView , DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Blog
 # Create your views here.
@@ -34,3 +37,8 @@ class Blogs(ListView , LoginRequiredMixin):
 
     def get_queryset(self):
         return Blog.objects.filter(owner=self.request.user).order_by("-createdAt")
+    
+class SingleBlog(DetailView):
+    model = Blog
+    context_object_name = "blog"
+    template_name = "single-blog.html"

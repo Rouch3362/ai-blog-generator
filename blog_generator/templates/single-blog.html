@@ -1,0 +1,14 @@
+{% include 'main.html' %}
+
+{% block content %}
+<section class="border-b-2 w-[800px] m-auto mt-20 flex flex-col justify-center items-center my-10">
+    <div href="" class="border-b-2 px-10 py-5">
+        <h1 class="text-2xl font-semibold text-center">{{ blog.title }}</h1>
+        <p class="mt-4 text-center text-lg font-base">{{ blog.body }}</p>
+        <div class="mt-10 flex justify-between items-center">
+            <span class="text-lg font-medium">Owner: <a href="" class="text-blue-400 underline">{{blog.owner.username}}</a></span>
+            <span class="text-lg font-medium">Created At: {{ blog.createdAt|date:"d M y" }}</span>
+        </div>
+    </div>
+</section>
+{% endblock content %}
