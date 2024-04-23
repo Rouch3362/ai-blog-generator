@@ -40,6 +40,7 @@ class Blogs(ListView , LoginRequiredMixin):
     model = Blog
     template_name = "blogs.html"
     context_object_name = "blogs"
+    paginate_by = 5
 
     def get_queryset(self):
         return Blog.objects.filter(owner=self.request.user).order_by("-createdAt")

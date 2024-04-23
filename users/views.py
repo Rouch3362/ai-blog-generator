@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.models import User
 from blog_generator.models import Blog
+from django.core.paginator import Paginator
 
 # Create your views here.
 def RegisterUser(request):
@@ -29,4 +30,8 @@ def single_user(request , username):
     except User.DoesNotExist:
         raise Http404("User Not Found")
         
+    paginator = Paginator(blogs , 5)
+    page_number = request.GET.get("page")
+    blogs = paginator.get_page(page_number)
+
     return render(request , "single-user.html" , {"user": user, "blogs": blogs})
