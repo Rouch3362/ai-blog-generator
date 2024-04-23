@@ -128,4 +128,5 @@ class UserBlog(ListAPIView):
     
 class SingleBlog(RetrieveAPIView):
     serializer_class = BlogSerializer
+    queryset = Blog.objects.all()
     
