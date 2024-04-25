@@ -126,15 +126,8 @@ WSGI_APPLICATION = 'ai_blog_generator.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env("PGDATABASE"),
-        'user': env("PGUSER"),
-        'password': env("PGPASSWORD"),
-        'host': env("PGHOST"),
-        'port': env("PGPORT"),
-        'OPTIONS':{
-            "sslmode": "require"
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
