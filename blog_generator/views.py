@@ -21,7 +21,7 @@ def home(request):
 
         if not request.user.is_authenticated:
             messages.error(request , "Login To Your Account To Use Blog Generator")
-            return
+            return redirect("login")
         
         # checks if the link is youtube link
         if not is_link_valid(url):

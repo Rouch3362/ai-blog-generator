@@ -24,7 +24,7 @@
         </section>    
     {% endif %}
 </main>
-{% if not data %}
+{% if not data and blogs %}
 <h2 class="text-2xl font-semibold text-center mt-6">5 Latest Generated Blogs</h2>
 <div class="w-[700px] m-auto">
     {% for blog in blogs %}
