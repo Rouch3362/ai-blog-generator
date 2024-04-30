@@ -124,15 +124,10 @@ WSGI_APPLICATION = 'ai_blog_generator.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':  env.get_value("DBNAME"),
-        "USER": env.get_value("DBUSER"),
-        "PASSWORD": env.get_value("DBPASSWORD"),
-        "HOST": env.get_value("DBHOST"),
-        "PORT": env.get_value("DBPORT")
-    }
+    'default': dj_database_url.parse(env.get_value("DBURL"))
 }
 
 
